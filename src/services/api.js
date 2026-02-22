@@ -8,6 +8,11 @@ export const loginUser = (email, password) => {
   return API.post("/auth/login", { email, password });
 };
 
+export const registerUser = (email, password) => {
+  return API.post("/auth/register", { email, password });
+};
+
+
 export const analyzePDF = (text, type, token) => {
   return API.post(
     "/analyze",
