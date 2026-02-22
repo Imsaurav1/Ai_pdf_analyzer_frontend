@@ -3,7 +3,8 @@ import * as pdfjsLib from "pdfjs-dist";
 import workerSrc from "pdfjs-dist/build/pdf.worker?url";
 import { analyzePDF } from "../services/api";
 import Loader from "./Loader";
-
+import { useNavigate } from "react-router-dom";
+const navigate = useNavigate();
 pdfjsLib.GlobalWorkerOptions.workerSrc = workerSrc;
 
 export default function UploadCard({ setResult }) {
@@ -19,8 +20,7 @@ export default function UploadCard({ setResult }) {
     // 🔐 Check login before processing
     if (!token) {
       alert("Please login first");
-      window.location.href = "/dashboard";
-      return;
+      navigate("/login");
     }
 
     setLoading(true);
