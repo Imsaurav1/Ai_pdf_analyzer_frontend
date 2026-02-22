@@ -1,11 +1,10 @@
 export default {
-  content: ["./index.html", "./src/**/*.{js,jsx}"],
+  content: [
+    "./index.html",
+    "./src/**/*.{js,jsx}"
+  ],
   theme: {
-    extend: {
-      backdropBlur: {
-        xs: "2px"
-      }
-    }
+    extend: {},
   },
-  plugins: []
+  plugins: [],
 }
