@@ -1,7 +1,10 @@
 import { useState } from "react";
 import { loginUser } from "../services/api";
+import { useNavigate } from "react-router-dom";
 
 export default function Dashboard() {
+  const navigate = useNavigate(); // ✅ proper navigation
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -15,15 +18,19 @@ export default function Dashboard() {
     try {
       const response = await loginUser(email, password);
 
-      // Store token
       localStorage.setItem("token", response.data.access_token);
 
       alert("Login Successful ✅");
 
-      // Optional redirect
-      window.location.href = "/";
+      navigate("/"); // ✅ redirect to home
+
     } catch (err) {
-      setError("Invalid email or password");
+      setError("Invalid email or password. Redirecting to Register...");
+
+      // ⏳ Small delay so user can see message
+      setTimeout(() => {
+        navigate("/register"); // ✅ redirect to register page
+      }, 1500);
     }
 
     setLoading(false);
