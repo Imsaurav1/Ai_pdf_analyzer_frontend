@@ -5,6 +5,7 @@ import { analyzePDF } from "../services/api";
 import Loader from "./Loader";
 import { useNavigate } from "react-router-dom";
 const navigate = useNavigate();
+
 pdfjsLib.GlobalWorkerOptions.workerSrc = workerSrc;
 
 export default function UploadCard({ setResult }) {
