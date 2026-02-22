@@ -1,10 +1,10 @@
 import { useState } from "react";
 import * as pdfjsLib from "pdfjs-dist";
+import workerSrc from "pdfjs-dist/build/pdf.worker?url";
 import { analyzePDF } from "../services/api";
 import Loader from "./Loader";
 
-pdfjsLib.GlobalWorkerOptions.workerSrc =
-  `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.js`;
+pdfjsLib.GlobalWorkerOptions.workerSrc = workerSrc;
 
 export default function UploadCard({ setResult }) {
   const [loading, setLoading] = useState(false);
