@@ -6,6 +6,14 @@ import Loader from "./Loader";
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = workerSrc;
 
+const token = localStorage.getItem("token");
+
+if (!token) {
+  alert("Please login first");
+  window.location.href = "/login";
+  return;
+}
+
 export default function UploadCard({ setResult }) {
   const [loading, setLoading] = useState(false);
   const [type, setType] = useState("resume");
