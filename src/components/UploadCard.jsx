@@ -6,14 +6,6 @@ import Loader from "./Loader";
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = workerSrc;
 
-const token = localStorage.getItem("token");
-
-if (!token) {
-  alert("Please login first");
-  window.location.href = "/login";
-  return;
-}
-
 export default function UploadCard({ setResult }) {
   const [loading, setLoading] = useState(false);
   const [type, setType] = useState("resume");
@@ -22,32 +14,52 @@ export default function UploadCard({ setResult }) {
     const file = e.target.files[0];
     if (!file) return;
 
+    const token = localStorage.getItem("token");
+
+    // 🔐 Check login before processing
+    if (!token) {
+      alert("Please login first");
+      window.location.href = "/login";
+      return;
+    }
+
     setLoading(true);
 
-    const reader = new FileReader();
+    try {
+      const reader = new FileReader();
 
-    reader.onload = async function () {
-      const typedarray = new Uint8Array(this.result);
-      const pdf = await pdfjsLib.getDocument(typedarray).promise;
+      reader.onload = async function () {
+        try {
+          const typedarray = new Uint8Array(this.result);
+          const pdf = await pdfjsLib.getDocument(typedarray).promise;
 
-      let text = "";
+          let text = "";
 
-      for (let i = 1; i <= pdf.numPages; i++) {
-        const page = await pdf.getPage(i);
-        const content = await page.getTextContent();
-        const strings = content.items.map((item) => item.str);
-        text += strings.join(" ");
-      }
+          for (let i = 1; i <= pdf.numPages; i++) {
+            const page = await pdf.getPage(i);
+            const content = await page.getTextContent();
+            const strings = content.items.map((item) => item.str);
+            text += strings.join(" ");
+          }
 
-      const token = localStorage.getItem("token");
+          const response = await analyzePDF(text, type, token);
 
-      const response = await analyzePDF(text, type, token);
+          setResult(response.data.result);
+        } catch (err) {
+          console.error("Error analyzing PDF:", err);
+          alert("Something went wrong while analyzing the PDF.");
+        } finally {
+          setLoading(false);
+        }
+      };
 
-      setResult(response.data.result);
+      reader.readAsArrayBuffer(file);
+
+    } catch (err) {
+      console.error("File reading error:", err);
+      alert("Failed to read the PDF file.");
       setLoading(false);
-    };
-
-    reader.readAsArrayBuffer(file);
+    }
   };
 
   return (
@@ -56,6 +68,7 @@ export default function UploadCard({ setResult }) {
 
       <select
         className="mb-4 p-2 rounded bg-white/20 w-full"
+        value={type}
         onChange={(e) => setType(e.target.value)}
       >
         <option value="resume">Resume Review</option>
