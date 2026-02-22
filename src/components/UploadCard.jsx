@@ -19,7 +19,7 @@ export default function UploadCard({ setResult }) {
     // 🔐 Check login before processing
     if (!token) {
       alert("Please login first");
-      window.location.href = "/login";
+      window.location.href = "/dashboard";
       return;
     }
 
