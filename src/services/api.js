@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "https://ai-pdf-analyzer-ktoo.onrender.com/api",
+  baseURL: "https://ai-pdf-analyzer-ktoo.onrender.com",
 });
 
 export const analyzePDF = (text, type, token) => {
