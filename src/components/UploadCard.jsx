@@ -22,6 +22,7 @@ export default function UploadCard({ setResult }) {
     if (!token) {
       alert("Please login first");
       navigate("/login");
+      return;
     }
 
     setLoading(true);
